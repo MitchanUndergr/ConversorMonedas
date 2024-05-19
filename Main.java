@@ -81,18 +81,24 @@ public class Main {
 
     public static void realizarConversionMonedas() {
         ConversorMonedas conversor = new ConversorMonedas();
-        double monto;
+        double monto = -1;
 
         do {
             // Solicitar al usuario la cantidad de dinero a convertir
             String montoStr = JOptionPane.showInputDialog(null, "Ingrese la cantidad de dinero a convertir:", "Conversor de Monedas", JOptionPane.QUESTION_MESSAGE);
 
-            // Convertir el monto a double
-            monto = Double.parseDouble(montoStr);
+            if (montoStr != null) {
+                try {
+                    // Convertir el monto a double
+                    monto = Double.parseDouble(montoStr);
 
-            // Verificar si el monto es positivo
-            if (monto < 0) {
-                JOptionPane.showMessageDialog(null, "Debe ingresar una cantidad positiva.", "Error", JOptionPane.ERROR_MESSAGE);
+                    // Verificar si el monto es positivo
+                    if (monto < 0) {
+                        JOptionPane.showMessageDialog(null, "Debe ingresar una cantidad positiva.", "Error", JOptionPane.ERROR_MESSAGE);
+                    }
+                } catch (NumberFormatException e) {
+                    JOptionPane.showMessageDialog(null, "Debe ingresar un número válido.", "Error", JOptionPane.ERROR_MESSAGE);
+                }
             }
         } while (monto < 0);
 
@@ -100,57 +106,66 @@ public class Main {
                 "Convertir de peso a dolar",
                 "Convertir de peso a euro",
                 "Convertir de peso a libra esterlina",
-                "Convertir de peso a won",
                 "Convertir de peso a yen",
+                "Convertir de peso a won",
                 "Convertir de dolar a peso",
                 "Convertir de euro a peso",
                 "Convertir de libra esterlina a peso",
-                "Convertir de won a peso",
-                "Convertir de yen a peso"
+                "Convertir de yen a peso",
+                "Convertir de won a peso"
         };
 
         // Mostrar el panel de opciones de monedas y obtener la opción seleccionada
         String opcionSeleccionada = (String) JOptionPane.showInputDialog(null, "Seleccione una opción de conversión de monedas:", "Conversor de Monedas", JOptionPane.QUESTION_MESSAGE, null, opcionesMonedas, opcionesMonedas[0]);
 
-        // Realizar la conversión de monedas según la opción seleccionada
-        double resultado = 0;
-        switch (opcionSeleccionada) {
-            case "Convertir de peso a dolar":
-                resultado = conversor.convertirPesoDolar(monto);
-                break;
-            case "Convertir de peso a euro":
-                resultado = conversor.convertirPesoEuro(monto);
-                break;
-            case "Convertir de peso a libra esterlina":
-                resultado = conversor.convertirPesoLibraEsterlina(monto);
-                break;
-            case "Convertir de peso a won":
-                resultado = conversor.convertirPesoWon(monto);
-                break;
-            case "Convertir de peso a yen":
-                resultado = conversor.convertirPesoYen(monto);
-                break;
-            case "Convertir de dolar a peso":
-                resultado = conversor.convertirDolarPeso(monto);
-                break;
-            case "Convertir de euro a peso":
-                resultado = conversor.convertirEuroPeso(monto);
-                break;
-            case "Convertir de libra esterlina a peso":
-                resultado = conversor.convertirLibraEsterlinaPeso(monto);
-                break;
-            case "Convertir de won a peso":
-                resultado = conversor.convertirWonPeso(monto);
-                break;
-            case "Convertir de yen a peso":
-                resultado = conversor.convertirYenPeso(monto);
-                break;
-            default:
-                JOptionPane.showMessageDialog(null, "Opción no válida.", "Error", JOptionPane.ERROR_MESSAGE);
-                break;
-        }
+        if (opcionSeleccionada != null) {
+            String fromCurrency = "CLP"; // Suponiendo que el peso es CLP
+            String toCurrency = "";
 
-        // Mostrar el resultado de la conversión de monedas
-        JOptionPane.showMessageDialog(null, "El resultado de la conversión es: " + resultado, "Conversión de Monedas", JOptionPane.INFORMATION_MESSAGE);
+            switch (opcionSeleccionada) {
+                case "Convertir de peso a dolar":
+                    toCurrency = "USD";
+                    break;
+                case "Convertir de peso a euro":
+                    toCurrency = "EUR";
+                    break;
+                case "Convertir de peso a libra esterlina":
+                    toCurrency = "GBP";
+                    break;
+                case "Convertir de peso a yen":
+                    toCurrency = "JPY";
+                    break;
+                case "Convertir de peso a won":
+                    toCurrency = "KRW";
+                    break;
+                case "Convertir de dolar a peso":
+                    fromCurrency = "USD";
+                    toCurrency = "CLP";
+                    break;
+                case "Convertir de euro a peso":
+                    fromCurrency = "EUR";
+                    toCurrency = "CLP";
+                    break;
+                case "Convertir de libra esterlina a peso":
+                    fromCurrency = "GBP";
+                    toCurrency = "CLP";
+                    break;
+                case "Convertir de yen a peso":
+                    fromCurrency = "JPY";
+                    toCurrency = "CLP";
+                    break;
+                case "Convertir de won a peso":
+                    fromCurrency = "KRW";
+                    toCurrency = "CLP";
+                    break;
+                default:
+                    JOptionPane.showMessageDialog(null, "Opción no válida.", "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+            }
+
+            double resultado = conversor.convertirMoneda(fromCurrency, toCurrency, monto);
+            JOptionPane.showMessageDialog(null, "El resultado de la conversión es: " + resultado, "Conversión de Monedas", JOptionPane.INFORMATION_MESSAGE);
+        }
     }
 }
+
