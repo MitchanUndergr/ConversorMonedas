@@ -1,7 +1,5 @@
 import javax.swing.JOptionPane;
 
-import javax.swing.JOptionPane;
-
 public class Main {
     public static void main(String[] args) {
         boolean continuar = false;
@@ -168,4 +166,3 @@ public class Main {
         }
     }
 }
-
